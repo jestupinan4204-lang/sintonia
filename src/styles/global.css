@@ -1,0 +1,20 @@
+*{
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+}
+
+html.texto-grande {
+    font-size: 120%;
+}
+
+h1 , h2 , h3 , h4 {
+    font-family:  var(--fuente-titular);
+}
+
+h1 {font-size: var(--tamano-texto-titular-h1);}
+h2 {font-size: var(--tamano-texto-titular-h2);}
+h3 {font-size: var(--tamano-texto-titular-h3);}
+h4 {font-size: var(--tamano-texto-titular-h4);}

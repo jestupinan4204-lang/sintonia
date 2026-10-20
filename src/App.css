@@ -1,0 +1,7 @@
+.sitio {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    background-color: var(--fondo-base);
+}
