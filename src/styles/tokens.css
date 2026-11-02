@@ -1,5 +1,3 @@
-
-@import url('https://fonts.googleapis.com/css2?family=Syne:wght@400..800&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Syne:wght@400..800&display=swap');
 
 :root {
@@ -8,29 +6,50 @@
     --fondo-elevada : #201F29;
     --fondo-sutil : #2A2935; 
     --fondo-inverso : #F4F2F7;
-    --marca-suave: #2A3314;
+    --marca-primario : #C6F24E;
+    --marca-primario-hover : #D1F76F;
+    --marca-suave : #2A3314;
     --marca-secundario : #8E7BFF;
-    --marca-secundario-suave :  #272631;
+    --marca-secundario-suave : #272631;
+    --marca-acento : #F7387F;
     --texto-principal : #F4F2F7;
     --texto-secundario : #A9A6B5;
     --texto-inverso : #15131C;
     --borde-sutil : #272631;
-    --borde-fuerte: #3D3C4B;
+    --borde-fuerte : #3D3C4B;
     --estado-exito : #4ADE80;
     --estado-exito-suave : #12301E;
     --estado-error-suave : #3A1517;
     --portada-1 : #8E7BFF;
     --portada-2 : #FF6B5E;
-    --portada-3 : #2BC4B6;
-    --portada-4 : #F5B544;
-    --fijo-blanco: #272631;
+    --portada-3 : #17C3A2;
+    --portada-4 : #FFB830;
+    --portada-5 : #F7387F;
+    --fijo-blanco : #FFFFFF;
+    --fijo-negro : #0C0B10;
     --fuente-titular : "Syne", sans-serif;
     --fuente-cuerpo : "Inter", sans-serif;
     --tamano-texto-titular-display : 4rem;
-    --tamano-texto-titular-h1: 2.5rem;
-    --tamano-texto-titular-h2: 1.75rem;
-    --tamano-texto-titular-h3:  1.25rem;
-    --tamano-texto-titular-h4: 1.125rem;
-    --tamano-texto-cuerpo-g: 1rem;
-    --tamano-texto-cuerpo-p: 0.875rem
+    --tamano-texto-titular-h1 : 2.5rem;
+    --tamano-texto-titular-h2 : 1.75rem;
+    --tamano-texto-titular-h3 : 1.25rem;
+    --tamano-texto-titular-h4 : 1.125rem;
+    --tamano-texto-cuerpo-g : 1rem;
+    --tamano-texto-cuerpo-m : 0.9375rem;
+    --tamano-texto-cuerpo-p : 0.875rem;
+    --tamano-texto-badge : 0.8125rem;
+    --radio-sm : 8px;
+    --radio-md : 14px;
+    --radio-lg : 22px;
+    --radio-xl : 26px;
+    --radio-2xl : 34px;
+    --radio-pill : 9999px;
+    --espacio-xs : 0.25rem;
+    --espacio-sm : 0.5rem;
+    --espacio-md : 1rem;
+    --espacio-lg : 1.5rem;
+    --espacio-xl : 2rem;
+    --espacio-2xl : 3rem;
+    --sombra-tarjeta : 0 14px 28px rgba(0, 0, 0, 0.35);
+    --sombra-nota : 0 10px 24px rgba(0, 0, 0, 0.25);
 }
