@@ -88,6 +88,30 @@ const Navbar = () => {
                 </div>
                 <div className="navbar-espacio" aria-hidden="true"></div>
                 <div className="navbar-utilidades">
+                    <div className="navbar-accesibilidad-contenedor" ref={accesibilidadRef}>
+                        <button
+                            className="navbar-accesibilidad"
+                            type="button"
+                            aria-label="Opciones de accesibilidad"
+                            aria-expanded={menuAccesibilidadAbierto}
+                            aria-controls="menu-accesibilidad"
+                            onClick={() => setMenuAccesibilidadAbierto((abierto) => !abierto)}
+                        >
+                            <img src={person} alt="" aria-hidden="true" />
+                        </button>
+                        {menuAccesibilidadAbierto && (
+                            <div className="menu-accesibilidad" id="menu-accesibilidad" aria-label="Opciones de accesibilidad">
+                                <label className="menu-accesibilidad-opcion">
+                                    <input
+                                        type="checkbox"
+                                        checked={textoGrande}
+                                        onChange={(event) => setTextoGrande(event.target.checked)}
+                                    />
+                                    <span>Texto grande</span>
+                                </label>
+                            </div>
+                        )}
+                    </div>
                     <div className="navbar-idioma-contenedor" ref={idiomasRef}>
                         <button
                             className="navbar-idioma"
@@ -120,30 +144,6 @@ const Navbar = () => {
                                         <span className="menu-idiomas-codigo">{item.codigo.toUpperCase()}</span>
                                     </button>
                                 ))}
-                            </div>
-                        )}
-                    </div>
-                    <div className="navbar-accesibilidad-contenedor" ref={accesibilidadRef}>
-                        <button
-                            className="navbar-accesibilidad"
-                            type="button"
-                            aria-label="Opciones de accesibilidad"
-                            aria-expanded={menuAccesibilidadAbierto}
-                            aria-controls="menu-accesibilidad"
-                            onClick={() => setMenuAccesibilidadAbierto((abierto) => !abierto)}
-                        >
-                            <img src={person} alt="" aria-hidden="true" />
-                        </button>
-                        {menuAccesibilidadAbierto && (
-                            <div className="menu-accesibilidad" id="menu-accesibilidad" aria-label="Opciones de accesibilidad">
-                                <label className="menu-accesibilidad-opcion">
-                                    <input
-                                        type="checkbox"
-                                        checked={textoGrande}
-                                        onChange={(event) => setTextoGrande(event.target.checked)}
-                                    />
-                                    <span>Texto grande</span>
-                                </label>
                             </div>
                         )}
                     </div>
