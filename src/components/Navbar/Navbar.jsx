@@ -10,6 +10,7 @@ const Navbar = ({ idioma: idiomaProp, onIdiomaChange }) => {
 
     const [enlaces, setEnlaces] = useState({});
     const [menuAccesibilidadAbierto, setMenuAccesibilidadAbierto] = useState(false);
+    const [menuMovilAbierto, setMenuMovilAbierto] = useState(false);
     const [tamanoTexto, setTamanoTexto] = useState(100);
     const [altoContraste, setAltoContraste] = useState(false);
     const [reducirMovimiento, setReducirMovimiento] = useState(false);
@@ -94,27 +95,36 @@ const Navbar = ({ idioma: idiomaProp, onIdiomaChange }) => {
     }, [espaciadoLectura]);
 
     useEffect(() => {
-        if (!menuAccesibilidadAbierto) return;
+        if (!menuAccesibilidadAbierto && !menuMovilAbierto) return;
 
         const cerrarAlHacerClickFuera = (event) => {
-            if (!accesibilidadRef.current?.contains(event.target)) {
+            if (menuAccesibilidadAbierto && !accesibilidadRef.current?.contains(event.target)) {
                 setMenuAccesibilidadAbierto(false);
             }
         };
         const cerrarConEscape = (event) => {
             if (event.key === "Escape") {
                 setMenuAccesibilidadAbierto(false);
+                setMenuMovilAbierto(false);
+            }
+        };
+
+        const manejarRedimension = () => {
+            if (window.innerWidth > 860) {
+                setMenuMovilAbierto(false);
             }
         };
 
         document.addEventListener("pointerdown", cerrarAlHacerClickFuera);
         document.addEventListener("keydown", cerrarConEscape);
+        window.addEventListener("resize", manejarRedimension);
 
         return () => {
             document.removeEventListener("pointerdown", cerrarAlHacerClickFuera);
             document.removeEventListener("keydown", cerrarConEscape);
+            window.removeEventListener("resize", manejarRedimension);
         };
-    }, [menuAccesibilidadAbierto]);
+    }, [menuAccesibilidadAbierto, menuMovilAbierto]);
 
     const restablecerAccesibilidad = () => {
         setTamanoTexto(100);
@@ -158,7 +168,10 @@ const Navbar = ({ idioma: idiomaProp, onIdiomaChange }) => {
                             aria-label="Opciones de accesibilidad"
                             aria-expanded={menuAccesibilidadAbierto}
                             aria-controls="menu-accesibilidad"
-                            onClick={() => setMenuAccesibilidadAbierto((abierto) => !abierto)}
+                            onClick={() => {
+                                setMenuAccesibilidadAbierto((abierto) => !abierto);
+                                setMenuMovilAbierto(false);
+                            }}
                         >
                             <img src={person} alt="" aria-hidden="true" />
                         </button>
@@ -331,8 +344,56 @@ const Navbar = ({ idioma: idiomaProp, onIdiomaChange }) => {
                             {idiom === "en" ? "Sign up" : "Crear cuenta"}
                         </button>
                     </div>
+
+                    <button
+                        type="button"
+                        className={`navbar-hamburguesa ${menuMovilAbierto ? "abierto" : ""}`}
+                        aria-label={menuMovilAbierto ? (idiom === "en" ? "Close menu" : "Cerrar menú") : (idiom === "en" ? "Open menu" : "Abrir menú")}
+                        aria-expanded={menuMovilAbierto}
+                        onClick={() => {
+                            setMenuMovilAbierto((prev) => !prev);
+                            setMenuAccesibilidadAbierto(false);
+                        }}
+                    >
+                        <span className="hamburguesa-barra"></span>
+                        <span className="hamburguesa-barra"></span>
+                        <span className="hamburguesa-barra"></span>
+                    </button>
                 </div>
             </nav>
+
+            {menuMovilAbierto && (
+                <div className="navbar-movil-desplegable" role="dialog" aria-label="Menú de navegación móvil">
+                    <ul className="navbar-movil-enlaces">
+                        {Object.keys(enlaces).map((key) => (
+                            <li key={key}>
+                                <a
+                                    href={"#" + key}
+                                    onClick={() => setMenuMovilAbierto(false)}
+                                >
+                                    {enlaces[key]}
+                                </a>
+                            </li>
+                        ))}
+                    </ul>
+                    <div className="navbar-movil-sesion">
+                        <button
+                            className="navbar-boton navbar-boton-sesion"
+                            type="button"
+                            onClick={() => setMenuMovilAbierto(false)}
+                        >
+                            {idiom === "en" ? "Log in" : "Ingresar"}
+                        </button>
+                        <button
+                            className="navbar-boton navbar-boton-registro"
+                            type="button"
+                            onClick={() => setMenuMovilAbierto(false)}
+                        >
+                            {idiom === "en" ? "Sign up" : "Crear cuenta"}
+                        </button>
+                    </div>
+                </div>
+            )}
         </header>
     );
 };

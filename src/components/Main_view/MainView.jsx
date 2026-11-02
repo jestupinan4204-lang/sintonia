@@ -319,7 +319,7 @@ const MainView = ({ idioma = "es" }) => {
                             {destacados?.titulo}
                         </h2>
                         <a href="#catalogo" className="seccion-enlace">
-                            {destacados?.enlaces?.descubrirMas} ;
+                            {destacados?.enlaces?.descubrirMas} &rarr;
                         </a>
                     </div>
 

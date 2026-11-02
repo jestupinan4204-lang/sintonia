@@ -67,7 +67,7 @@
 .navbar-utilidades {
     display: flex;
     align-items: center;
-    gap: 1.25rem;
+    gap: 1rem;
     flex-shrink: 0;
 }
 
@@ -361,8 +361,8 @@
 .navbar-sesion {
     display: flex;
     align-items: center;
-    gap: 1.5rem;
-    margin-left: 0.5rem;
+    gap: 1.25rem;
+    margin-left: 0.25rem;
 }
 
 .navbar-boton {
@@ -387,14 +387,118 @@
 
 .navbar-boton-registro {
     min-height: 2.35rem;
-    padding: 0 1.35rem;
+    padding: 0 1.25rem;
     color: var(--texto-inverso);
     background-color: var(--marca-primario);
     font-weight: 700;
+    white-space: nowrap;
 }
 
 .navbar-boton-registro:hover {
     background-color: var(--marca-primario-hover);
+}
+
+.navbar-hamburguesa {
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+    width: 2.35rem;
+    height: 2.35rem;
+    background-color: var(--fondo-superficie);
+    border: 1px solid var(--borde-sutil);
+    border-radius: 8px;
+    padding: 0;
+    cursor: pointer;
+}
+
+.hamburguesa-barra {
+    display: block;
+    width: 18px;
+    height: 2px;
+    background-color: var(--texto-principal);
+    border-radius: 2px;
+    transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+.navbar-hamburguesa.abierto .hamburguesa-barra:nth-child(1) {
+    transform: translateY(7px) rotate(45deg);
+}
+
+.navbar-hamburguesa.abierto .hamburguesa-barra:nth-child(2) {
+    opacity: 0;
+}
+
+.navbar-hamburguesa.abierto .hamburguesa-barra:nth-child(3) {
+    transform: translateY(-7px) rotate(-45deg);
+}
+
+.navbar-movil-desplegable {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    background-color: #121118;
+    border-bottom: 1px solid var(--borde-fuerte);
+    padding: 1.5rem 1.25rem;
+    flex-direction: column;
+    gap: 1.5rem;
+    box-shadow: 0 16px 36px rgba(0, 0, 0, 0.6);
+    z-index: 99;
+    animation: aparecerAbajo 0.2s ease;
+}
+
+@keyframes aparecerAbajo {
+    from {
+        opacity: 0;
+        transform: translateY(-8px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.navbar-movil-enlaces {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.navbar-movil-enlaces a {
+    font-family: var(--fuente-cuerpo);
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--texto-principal);
+    text-decoration: none;
+    padding: 0.5rem 0;
+    display: block;
+}
+
+.navbar-movil-sesion {
+    display: flex;
+    flex-direction: column;
+    gap: 0.85rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--borde-sutil);
+}
+
+.navbar-movil-sesion .navbar-boton {
+    width: 100%;
+    min-height: 2.75rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.navbar-movil-sesion .navbar-boton-sesion {
+    background-color: var(--fondo-superficie);
+    border: 1px solid var(--borde-sutil);
 }
 
 .navbar-marca:focus-visible,
@@ -405,34 +509,72 @@
 .menu-accesibilidad-cerrar:focus-visible,
 .stepper-btn:focus-visible,
 .toggle-switch input:focus-visible + .toggle-slider,
-.menu-accesibilidad-restablecer:focus-visible {
+.menu-accesibilidad-restablecer:focus-visible,
+.navbar-hamburguesa:focus-visible {
     outline: 2px solid var(--marca-secundario);
     outline-offset: 4px;
 }
 
-@media (max-width: 860px) {
+@media (max-width: 960px) {
     .navbar {
-        padding: 0 var(--espacio-md);
+        padding: 0 1.25rem;
     }
 
     .navbar-lado-izquierdo {
-        gap: var(--espacio-lg);
+        gap: 1.5rem;
     }
 
     .navbar-enlaces {
         display: none;
     }
 
+    .navbar-hamburguesa {
+        display: flex;
+    }
+
+    .navbar-movil-desplegable {
+        display: flex;
+    }
+
     .navbar-sesion {
-        gap: 1rem;
-        margin-left: 0;
+        display: none;
+    }
+}
+
+@media (max-width: 520px) {
+    .navbar {
+        padding: 0 1rem;
+        height: 4.25rem;
+    }
+
+    .navbar-marca img {
+        height: 1.85rem;
+    }
+
+    .navbar-utilidades {
+        gap: 0.5rem;
+    }
+
+    .navbar-accesibilidad {
+        width: 2.15rem;
+        height: 2.15rem;
+    }
+
+    .navbar-idioma-btn {
+        padding: 0.3rem 0.5rem;
+        font-size: 0.7rem;
     }
 
     .menu-accesibilidad {
-        left: auto;
-        right: 0;
+        position: fixed;
+        top: 4.75rem;
+        left: 0.75rem;
+        right: 0.75rem;
+        width: auto;
+        max-width: 360px;
+        margin: 0 auto;
         transform: none;
-        width: min(340px, calc(100vw - 2rem));
+        padding: 1.2rem;
     }
 }
 
@@ -455,4 +597,3 @@ html.espaciado-lectura {
     letter-spacing: 0.05em !important;
     word-spacing: 0.1em !important;
 }
-
