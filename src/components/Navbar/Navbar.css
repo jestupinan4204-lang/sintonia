@@ -104,32 +104,224 @@
 
 .menu-accesibilidad {
     position: absolute;
-    top: calc(100% + 0.75rem);
-    right: 0;
-    min-width: 12rem;
-    padding: var(--espacio-sm) var(--espacio-md);
-    background-color: var(--fondo-superficie);
+    top: calc(100% + 0.85rem);
+    left: 50%;
+    transform: translateX(-65%);
+    width: 340px;
+    padding: 1.4rem;
+    background-color: #17161F;
     border: 1px solid var(--borde-fuerte);
-    border-radius: var(--radio-md);
-    box-shadow: var(--sombra-tarjeta);
-    z-index: 10;
+    border-radius: 20px;
+    box-shadow: 0 20px 48px rgba(0, 0, 0, 0.6);
+    z-index: 1000;
+    color: var(--texto-principal);
 }
 
-.menu-accesibilidad-opcion {
+.menu-accesibilidad-cabecera {
     display: flex;
     align-items: center;
-    gap: var(--espacio-sm);
-    color: var(--texto-principal);
+    justify-content: space-between;
+    margin-bottom: 1.25rem;
+}
+
+.menu-accesibilidad-titulo {
     font-family: var(--fuente-cuerpo);
-    font-size: var(--tamano-texto-cuerpo-p);
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: #FFFFFF;
+    margin: 0;
+}
+
+.menu-accesibilidad-cerrar {
+    background: transparent;
+    border: none;
+    color: var(--texto-secundario);
+    font-size: 1.35rem;
+    line-height: 1;
+    cursor: pointer;
+    padding: 0.2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: color 0.15s ease;
+}
+
+.menu-accesibilidad-cerrar:hover {
+    color: #FFFFFF;
+}
+
+.menu-accesibilidad-seccion {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    margin-bottom: 1.35rem;
+}
+
+.menu-accesibilidad-subtitulo {
+    font-family: var(--fuente-cuerpo);
+    font-size: 0.8125rem;
+    font-weight: 700;
+    color: #FFFFFF;
+}
+
+.menu-accesibilidad-stepper {
+    background-color: #211F2B;
+    border-radius: 12px;
+    padding: 0.35rem 0.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.stepper-btn {
+    width: 2.2rem;
+    height: 2.2rem;
+    background-color: #2B2937;
+    border: none;
+    border-radius: 8px;
+    color: #FFFFFF;
+    font-size: 1.15rem;
+    font-weight: 700;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.15s ease;
+}
+
+.stepper-btn:hover {
+    background-color: #383648;
+}
+
+.stepper-valor {
+    font-family: var(--fuente-cuerpo);
+    font-size: 0.875rem;
+    font-weight: 700;
+    color: #FFFFFF;
+}
+
+.menu-accesibilidad-opciones {
+    display: flex;
+    flex-direction: column;
+    gap: 1.15rem;
+    margin-bottom: 1.35rem;
+}
+
+.menu-accesibilidad-fila {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+}
+
+.menu-accesibilidad-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+    flex: 1;
+    min-width: 0;
+}
+
+.menu-accesibilidad-opcion-titulo {
+    font-family: var(--fuente-cuerpo);
+    font-size: 0.8125rem;
+    font-weight: 700;
+    color: #FFFFFF;
+}
+
+.menu-accesibilidad-opcion-desc {
+    font-family: var(--fuente-cuerpo);
+    font-size: 0.72rem;
+    color: var(--texto-secundario);
+    line-height: 1.35;
+}
+
+.toggle-switch {
+    position: relative;
+    display: inline-block;
+    width: 42px;
+    height: 24px;
+    flex-shrink: 0;
     cursor: pointer;
 }
 
-.menu-accesibilidad-opcion input {
-    width: 1rem;
-    height: 1rem;
-    margin: 0;
-    accent-color: var(--marca-secundario);
+.toggle-switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+    position: absolute;
+}
+
+.toggle-slider {
+    position: absolute;
+    inset: 0;
+    background-color: #383547;
+    border-radius: 999px;
+    transition: background-color 0.2s ease;
+}
+
+.toggle-slider::before {
+    content: "";
+    position: absolute;
+    height: 18px;
+    width: 18px;
+    left: 3px;
+    bottom: 3px;
+    background-color: #FFFFFF;
+    border-radius: 50%;
+    transition: transform 0.2s ease;
+}
+
+.toggle-switch input:checked + .toggle-slider {
+    background-color: var(--marca-primario);
+}
+
+.toggle-switch input:checked + .toggle-slider::before {
+    transform: translateX(18px);
+    background-color: #15131C;
+}
+
+.menu-accesibilidad-nota {
+    font-family: var(--fuente-cuerpo);
+    font-size: 0.6875rem;
+    color: var(--texto-secundario);
+    line-height: 1.4;
+    margin: 0 0 1.25rem 0;
+    opacity: 0.8;
+}
+
+.menu-accesibilidad-pie {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+}
+
+.menu-accesibilidad-declaracion {
+    font-family: var(--fuente-cuerpo);
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--marca-primario);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    cursor: pointer;
+}
+
+.menu-accesibilidad-restablecer {
+    background-color: #211F2B;
+    border: 1px solid var(--borde-fuerte);
+    color: #FFFFFF;
+    font-family: var(--fuente-cuerpo);
+    font-size: 0.75rem;
+    font-weight: 600;
+    padding: 0.5rem 0.95rem;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.15s ease;
+}
+
+.menu-accesibilidad-restablecer:hover {
+    background-color: #2D2B3A;
 }
 
 .navbar-idioma-toggle {
@@ -210,7 +402,10 @@
 .navbar-accesibilidad:focus-visible,
 .navbar-idioma-btn:focus-visible,
 .navbar-boton:focus-visible,
-.menu-accesibilidad-opcion input:focus-visible {
+.menu-accesibilidad-cerrar:focus-visible,
+.stepper-btn:focus-visible,
+.toggle-switch input:focus-visible + .toggle-slider,
+.menu-accesibilidad-restablecer:focus-visible {
     outline: 2px solid var(--marca-secundario);
     outline-offset: 4px;
 }
@@ -232,4 +427,32 @@
         gap: 1rem;
         margin-left: 0;
     }
+
+    .menu-accesibilidad {
+        left: auto;
+        right: 0;
+        transform: none;
+        width: min(340px, calc(100vw - 2rem));
+    }
 }
+
+html.alto-contraste {
+    filter: contrast(125%);
+}
+
+html.reducir-movimiento * {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+}
+
+html.subrayar-enlaces a {
+    text-decoration: underline !important;
+}
+
+html.espaciado-lectura {
+    line-height: 1.8 !important;
+    letter-spacing: 0.05em !important;
+    word-spacing: 0.1em !important;
+}
+
