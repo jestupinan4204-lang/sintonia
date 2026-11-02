@@ -9,8 +9,19 @@ async function getNavbarTexts(idioma) {
     return request.json();
 }
 
-export default async function getLinksNavbar(idioma) {
-    const navbarJson = await getNavbarTexts(idioma);
-    const enlaces = await navbarJson?.textos?.navbar?.enlaces ?? {};
-    return enlaces.invitado ?? {};
+export default async function getLinksNavbar(idioma = "es") {
+    try {
+        const navbarJson = await getNavbarTexts(idioma);
+        const enlaces = navbarJson?.textos?.navbar?.enlaces ?? {};
+        if (enlaces.invitado && Object.keys(enlaces.invitado).length > 0) {
+            return enlaces.invitado;
+        }
+        return idioma === "en"
+            ? { inicio: "Home", catalogo: "Catalog" }
+            : { inicio: "Inicio", catalogo: "Catálogo" };
+    } catch (error) {
+        return idioma === "en"
+            ? { inicio: "Home", catalogo: "Catalog" }
+            : { inicio: "Inicio", catalogo: "Catálogo" };
+    }
 }
