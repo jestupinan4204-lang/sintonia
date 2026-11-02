@@ -1,39 +1,58 @@
-import react from 'react';
-import './Navbar.css';
+import React, { useState, useEffect, useRef } from "react";
+import "./Navbar.css";
 import logo from "./Icons/logo.svg";
-import getLinksNavbar from './ApiMenuTexts.js';
-import getIdiomsCode from "./ApiIdiomsTexts.js";
-import globe from "./Icons/globe.svg";
+import getLinksNavbar from "./ApiMenuTexts.js";
 import person from "./Icons/person.svg";
 
-const Navbar = () => {
+const Navbar = ({ idioma: idiomaProp, onIdiomaChange }) => {
+    const [idiomInternal, setIdiomInternal] = useState("es");
+    const idiom = idiomaProp ?? idiomInternal;
 
-    const [idiom , setIdiom] = react.useState("es");
-    const [enlaces ,setEnlaces] = react.useState ({});
-    const [idiomas , setIdiomas] = react.useState ([]);
-    const [menuIdiomasAbierto, setMenuIdiomasAbierto] = react.useState(false);
-    const [menuAccesibilidadAbierto, setMenuAccesibilidadAbierto] = react.useState(false);
-    const [textoGrande, setTextoGrande] = react.useState(false);
-    const idiomasRef = react.useRef(null);
-    const accesibilidadRef = react.useRef(null);
+    const [enlaces, setEnlaces] = useState({});
+    const [menuAccesibilidadAbierto, setMenuAccesibilidadAbierto] = useState(false);
+    const [textoGrande, setTextoGrande] = useState(false);
+    const accesibilidadRef = useRef(null);
 
-    react.useEffect (() => {
-        const cargar_enlaces = async () => {
-            const datos = await getLinksNavbar (idiom);
-            setEnlaces (await datos);
+    const cambiarIdioma = (nuevoIdioma) => {
+        if (onIdiomaChange) {
+            onIdiomaChange(nuevoIdioma);
+        } else {
+            setIdiomInternal(nuevoIdioma);
         }
-        cargar_enlaces ();
-    } , [idiom])
+    };
 
-    react.useEffect (() => {
-        const CargarIdiomas = async () => {
-            const datos = await getIdiomsCode ();
-            setIdiomas (await datos);
-        }
-        CargarIdiomas ();
-    } , [])
+    useEffect(() => {
+        let activo = true;
 
-    react.useEffect(() => {
+        const cargarEnlaces = async () => {
+            try {
+                const datos = await getLinksNavbar(idiom);
+                if (activo && datos && Object.keys(datos).length > 0) {
+                    setEnlaces(datos);
+                } else if (activo) {
+                    setEnlaces(
+                        idiom === "en"
+                            ? { inicio: "Home", catalogo: "Catalog" }
+                            : { inicio: "Inicio", catalogo: "Catálogo" }
+                    );
+                }
+            } catch (err) {
+                if (activo) {
+                    setEnlaces(
+                        idiom === "en"
+                            ? { inicio: "Home", catalogo: "Catalog" }
+                            : { inicio: "Inicio", catalogo: "Catálogo" }
+                    );
+                }
+            }
+        };
+        cargarEnlaces();
+        return () => {
+            activo = false;
+        };
+    }, [idiom]);
+
+    useEffect(() => {
         document.documentElement.classList.toggle("texto-grande", textoGrande);
 
         return () => {
@@ -41,22 +60,16 @@ const Navbar = () => {
         };
     }, [textoGrande]);
 
-    react.useEffect(() => {
-        if (!menuIdiomasAbierto && !menuAccesibilidadAbierto) {
-            return undefined;
-        }
+    useEffect(() => {
+        if (!menuAccesibilidadAbierto) return;
 
         const cerrarAlHacerClickFuera = (event) => {
-            if (!idiomasRef.current?.contains(event.target)) {
-                setMenuIdiomasAbierto(false);
-            }
             if (!accesibilidadRef.current?.contains(event.target)) {
                 setMenuAccesibilidadAbierto(false);
             }
         };
         const cerrarConEscape = (event) => {
             if (event.key === "Escape") {
-                setMenuIdiomasAbierto(false);
                 setMenuAccesibilidadAbierto(false);
             }
         };
@@ -68,25 +81,24 @@ const Navbar = () => {
             document.removeEventListener("pointerdown", cerrarAlHacerClickFuera);
             document.removeEventListener("keydown", cerrarConEscape);
         };
-    }, [menuIdiomasAbierto, menuAccesibilidadAbierto]);
+    }, [menuAccesibilidadAbierto]);
 
     return (
         <header className="navbar">
-            <nav className="navbar-interior">
-                <a href="#" className="navbar-marca" aria-label="Ir al inicio">
-                    <img src={logo} alt="Sintonia" />
-                </a>
-                <div className="navbar-movil-acciones"></div>
-                <div className="navbar-panel">
-                    <ul className="navbar-enlaces"> 
-                        {Object.keys(enlaces).map ((key) => (
+            <nav className="navbar-interior" aria-label="Navegación principal">
+                <div className="navbar-lado-izquierdo">
+                    <a href="#" className="navbar-marca" aria-label="Ir al inicio">
+                        <img src={logo} alt="Sintonía" />
+                    </a>
+
+                    <ul className="navbar-enlaces">
+                        {Object.keys(enlaces).map((key) => (
                             <li key={key}>
-                                <a href={"#"+key}>{enlaces[key]}</a>
+                                <a href={"#" + key}>{enlaces[key]}</a>
                             </li>
                         ))}
                     </ul>
                 </div>
-                <div className="navbar-espacio" aria-hidden="true"></div>
                 <div className="navbar-utilidades">
                     <div className="navbar-accesibilidad-contenedor" ref={accesibilidadRef}>
                         <button
@@ -99,6 +111,7 @@ const Navbar = () => {
                         >
                             <img src={person} alt="" aria-hidden="true" />
                         </button>
+
                         {menuAccesibilidadAbierto && (
                             <div className="menu-accesibilidad" id="menu-accesibilidad" aria-label="Opciones de accesibilidad">
                                 <label className="menu-accesibilidad-opcion">
@@ -112,53 +125,36 @@ const Navbar = () => {
                             </div>
                         )}
                     </div>
-                    <div className="navbar-idioma-contenedor" ref={idiomasRef}>
+                    <div className="navbar-idioma-toggle" role="group" aria-label="Seleccionar idioma">
                         <button
-                            className="navbar-idioma"
+                            className={`navbar-idioma-btn ${idiom === "es" ? "activo" : ""}`}
                             type="button"
-                            aria-label="Seleccionar idioma"
-                            aria-expanded={menuIdiomasAbierto}
-                            aria-controls="menu-idiomas"
-                            onClick={() => setMenuIdiomasAbierto((abierto) => !abierto)}
+                            aria-pressed={idiom === "es"}
+                            onClick={() => cambiarIdioma("es")}
                         >
-                            <img className="navbar-idioma-icono" src={globe} alt="" />
-                            <span className="navbar-idioma-seleccionado">{idiom.toUpperCase()}</span>
-                            <svg className={`navbar-idioma-chevron${menuIdiomasAbierto ? " abierto" : ""}`} viewBox="0 0 16 16" aria-hidden="true">
-                                <path d="m4 6 4 4 4-4" />
-                            </svg>
+                            ES
                         </button>
-                        {menuIdiomasAbierto && (
-                            <div className="menu-idiomas" id="menu-idiomas" aria-label="Idiomas disponibles">
-                                {idiomas.map((item) => (
-                                    <button
-                                        className="menu-idiomas-opcion"
-                                        key={item.codigo}
-                                        type="button"
-                                        aria-pressed={idiom === item.codigo}
-                                        onClick={() => {
-                                            setIdiom(item.codigo);
-                                            setMenuIdiomasAbierto(false);
-                                        }}
-                                    >
-                                        <span>{item.nombre}</span>
-                                        <span className="menu-idiomas-codigo">{item.codigo.toUpperCase()}</span>
-                                    </button>
-                                ))}
-                            </div>
-                        )}
+                        <button
+                            className={`navbar-idioma-btn ${idiom === "en" ? "activo" : ""}`}
+                            type="button"
+                            aria-pressed={idiom === "en"}
+                            onClick={() => cambiarIdioma("en")}
+                        >
+                            EN
+                        </button>
                     </div>
                     <div className="navbar-sesion">
                         <button className="navbar-boton navbar-boton-sesion" type="button">
-                            Ingresar
+                            {idiom === "en" ? "Log in" : "Ingresar"}
                         </button>
                         <button className="navbar-boton navbar-boton-registro" type="button">
-                            Crear cuenta
+                            {idiom === "en" ? "Sign up" : "Crear cuenta"}
                         </button>
                     </div>
                 </div>
             </nav>
         </header>
-    )
-}
+    );
+};
 
 export default Navbar;
