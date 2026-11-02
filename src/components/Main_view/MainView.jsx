@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "./MainView.css";
-import getTexts from "./js/getTexts.js";
+import getTexts, { getGeneros } from "./js/getTexts.js";
 import logo from "../Navbar/Icons/logo.svg";
 
 const ALBUMES_DESTACADOS = [
@@ -42,19 +42,35 @@ const ALBUMES_DESTACADOS = [
     }
 ];
 
+const COLORES_GENERO = {
+    pop: "var(--portada-3)",
+    indie: "var(--portada-2)",
+    rock: "var(--portada-1)",
+    electronica: "#3B82F6",
+    salsa: "var(--portada-5)",
+    tropical: "var(--portada-4)",
+    andina: "#818CF8",
+    folk: "#10B981",
+    urbano: "var(--portada-1)",
+    lofi: "var(--portada-4)",
+    jazz: "var(--portada-5)",
+    instrumental: "#3B82F6"
+};
+
 const GENEROS_DESTACADOS = [
-    { id: "pop", nombre: "Pop", color: "var(--portada-3)", tipo: "pop" },
-    { id: "indie", nombre: "Indie", color: "var(--portada-2)", tipo: "indie" },
-    { id: "rock", nombre: "Rock", color: "var(--portada-1)", tipo: "rock" },
-    { id: "electronica", nombre: "Electrónica", color: "#3B82F6", tipo: "electronica" },
-    { id: "salsa", nombre: "Salsa", color: "var(--portada-5)", tipo: "salsa" },
-    { id: "tropical", nombre: "Tropical", color: "var(--portada-4)", tipo: "tropical" },
-    { id: "andina", nombre: "Música andina", color: "#818CF8", tipo: "andina" },
-    { id: "folk", nombre: "Folk", color: "#10B981", tipo: "folk" }
+    { id: "gen_pop", nombre: "Pop", color: "var(--portada-3)", tipo: "pop" },
+    { id: "gen_indie", nombre: "Indie", color: "var(--portada-2)", tipo: "indie" },
+    { id: "gen_rock", nombre: "Rock", color: "var(--portada-1)", tipo: "rock" },
+    { id: "gen_electronica", nombre: "Electrónica", color: "#3B82F6", tipo: "electronica" },
+    { id: "gen_salsa", nombre: "Salsa", color: "var(--portada-5)", tipo: "salsa" },
+    { id: "gen_tropical", nombre: "Tropical", color: "var(--portada-4)", tipo: "tropical" },
+    { id: "gen_andina", nombre: "Música andina", color: "#818CF8", tipo: "andina" },
+    { id: "gen_folk", nombre: "Folk", color: "#10B981", tipo: "folk" }
 ];
 
 const MainView = ({ idioma = "es" }) => {
     const [datosVista, setDatosVista] = useState(null);
+    const [generosLista, setGenerosLista] = useState([]);
     const [cargando, setCargando] = useState(true);
 
     useEffect(() => {
@@ -63,9 +79,20 @@ const MainView = ({ idioma = "es" }) => {
         const cargarDatos = async () => {
             try {
                 setCargando(true);
-                const datos = await getTexts(idioma);
-                if (activo && datos) {
-                    setDatosVista(datos);
+                const [datos, generosRes] = await Promise.all([
+                    getTexts(idioma),
+                    getGeneros()
+                ]);
+                if (activo) {
+                    if (datos) {
+                        setDatosVista(datos);
+                    }
+                    const lista = (Array.isArray(generosRes) && generosRes.length > 0)
+                        ? generosRes
+                        : (Array.isArray(datos?.generosLista) && datos.generosLista.length > 0 ? datos.generosLista : []);
+                    if (lista.length > 0) {
+                        setGenerosLista(lista);
+                    }
                 }
             } catch (err) {
                 console.error(err);
@@ -220,6 +247,36 @@ const MainView = ({ idioma = "es" }) => {
                         <div className="genero-peek-arco-amarillo"></div>
                     </div>
                 );
+            case "urbano":
+                return (
+                    <div className="genero-peek-contenedor">
+                        <div className="genero-peek-ondas"></div>
+                    </div>
+                );
+            case "lofi":
+                return (
+                    <div className="genero-peek-contenedor">
+                        <div className="genero-peek-neon"></div>
+                    </div>
+                );
+            case "jazz":
+                return (
+                    <div className="genero-peek-contenedor">
+                        <div className="genero-peek-dados">
+                            <span className="peek-punto"></span>
+                            <span className="peek-punto"></span>
+                            <span className="peek-punto"></span>
+                            <span className="peek-punto"></span>
+                        </div>
+                    </div>
+                );
+            case "instrumental":
+                return (
+                    <div className="genero-peek-contenedor">
+                        <div className="genero-peek-circulo"></div>
+                        <div className="genero-peek-arco"></div>
+                    </div>
+                );
             default:
                 return null;
         }
@@ -231,6 +288,8 @@ const MainView = ({ idioma = "es" }) => {
     const generos = datosVista?.generos;
     const cta = datosVista?.cta;
     const footer = datosVista?.footer;
+
+    const listaMostrarGeneros = generosLista.length > 0 ? generosLista : GENEROS_DESTACADOS;
 
     return (
         <main className="main-view">
@@ -267,7 +326,7 @@ const MainView = ({ idioma = "es" }) => {
 
                                 <div className="cifra-item">
                                     <span className="cifra-valor">
-                                        {cifras?.generos?.valor ?? "12"}
+                                        {cifras?.generos?.valor ?? (generosLista.length > 0 ? generosLista.length : "12")}
                                     </span>
                                     <span className="cifra-etiqueta">
                                         {cifras?.generos?.etiqueta}
@@ -319,7 +378,7 @@ const MainView = ({ idioma = "es" }) => {
                             {destacados?.titulo}
                         </h2>
                         <a href="#catalogo" className="seccion-enlace">
-                            {destacados?.enlaces?.descubrirMas} ;
+                            {destacados?.enlaces?.descubrirMas} &rarr;
                         </a>
                     </div>
 
@@ -347,17 +406,25 @@ const MainView = ({ idioma = "es" }) => {
                     </div>
 
                     <div className="generos-cuadricula">
-                        {GENEROS_DESTACADOS.map((gen) => (
-                            <a
-                                key={gen.id}
-                                href={`#genero-${gen.id}`}
-                                className="genero-tarjeta"
-                                style={{ backgroundColor: gen.color }}
-                            >
-                                <span className="genero-nombre">{gen.nombre}</span>
-                                {renderPeekGenero(gen.tipo)}
-                            </a>
-                        ))}
+                        {listaMostrarGeneros.map((gen) => {
+                            const clave = (gen.id || "").replace("gen_", "").toLowerCase();
+                            const tipo = gen.tipo || clave;
+                            const color = gen.color && !gen.color.startsWith("portada/")
+                                ? gen.color
+                                : (COLORES_GENERO[clave] || (gen.color?.startsWith("portada/") ? `var(--${gen.color.replace('/', '-')})` : "var(--portada-3)"));
+
+                            return (
+                                <a
+                                    key={gen.id}
+                                    href={`#genero-${clave}`}
+                                    className="genero-tarjeta"
+                                    style={{ backgroundColor: color }}
+                                >
+                                    <span className="genero-nombre">{gen.nombre}</span>
+                                    {renderPeekGenero(tipo)}
+                                </a>
+                            );
+                        })}
                     </div>
                 </section>
 
